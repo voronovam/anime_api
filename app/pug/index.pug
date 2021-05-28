@@ -1,0 +1,19 @@
+doctype html
+html(lang="ru-RU")
+  head
+    meta(charset='utf-8')
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    meta(name='description' content='')
+    title Title
+    link(href="./css/main.css" rel="stylesheet")
+
+  body
+    .container
+      .main-content
+        include includes/header
+        main.main
+          include blocks/left_col
+          include blocks/content
+      include includes/aside
+
+    script(async, defer, src='./js/main.js')

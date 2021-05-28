@@ -1,0 +1,87 @@
+.container
+  display: flex
+  align-content: flex-start
+  flex-wrap: wrap
+  margin: 0 auto
+  padding: 20px
+  height: 100%
+  @include desktop
+    flex-wrap: nowrap
+    align-content: space-between
+.page-element
+  border: 1px solid #3963aa
+  padding: 20px
+  background: $color-accent
+  &__inner
+    @include innerbox
+
+.main-content
+  display: flex
+  flex-direction: column
+  //flex-wrap: wrap
+  flex-grow: 1
+  //height: 100%
+  width: 100%
+  @include desktop
+    width: unset
+
+.header
+  min-height: 250px
+
+.main
+  width: 100%
+  display: flex
+  flex-grow: 1
+
+.aside
+  margin-left: auto
+  width: calc(100% - 300px)
+  min-height: 440px
+  padding: 30px
+  @include desktop
+    flex: 0 0 320px
+
+.left-col
+  flex: 0 0 300px
+
+.right-col
+  flex: 0 0 320px
+
+.page-content
+  padding: 40px
+  flex-grow: 1
+  min-height: 530px
+  &__listCount
+    margin-top: 30px
+    font-size: 30px
+    font-weight: 700
+    color: $color-accent
+  &__list
+    margin-top: 30px
+  &__listItem
+    margin-top: 20px
+  &__listItemHeadline
+    font-weight: 700
+    font-size: 18px
+  &__listItemCharacter
+    font-weight: 700
+    font-size: 18px
+  &__listItemQuote
+    @include txt
+
+  &__btn
+    padding: 14px
+    min-width: 250px
+    background: $color-accent
+    text-transform: uppercase
+    font-family: inherit
+    color: white
+    margin-top: 30px
+    border: none
+    font-size: 20px
+    transition: $transition-base
+    cursor: pointer
+    &:hover, &:focus
+      outline: none
+      box-shadow: $shw_main
+      background: darken($color-accent, 5%)
