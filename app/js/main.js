@@ -10,19 +10,12 @@ window.onload = function() {
         return parent.appendChild(el);
     }
 
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
 
     const list = document.getElementById('pageContent');
     const btn = document.getElementById('loadMore');
+    let nextPage = 1;
 
-    const currentPage = 0;
-    let nextPage = currentPage + 1;
-    const title = 'naruto'
-    const requestURL = `https://animechan.vercel.app/api/quotes/anime?title=${title}&page=${nextPage}`;
-
-    function sendRequest(method, url, page){
+    function sendRequest(method, url){
         const headers = {
             'Content-type': 'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -48,62 +41,54 @@ window.onload = function() {
 
     }
 
+    getData();
+    function getData(){
+        nextPage++;
+        const requestURL = `https://animechan.vercel.app/api/quotes/anime?title=naruto&page=${nextPage}`;
+        sendRequest('GET', requestURL)
+            .then(function(data) {
+                let quotes = data;
+                //console.log('quotes:', typeof quotes, quotes);
 
-    sendRequest('GET', requestURL, nextPage)
-        .then(function(data) {
-            let quotes = data;
-            console.log('quotes:', typeof quotes, quotes);
+                quotes.sort( (a, b) => {
+                    if (a.character < b.character)
+                        return -1
+                    if (a.character > b.character)
+                        return 1
+                    return 0
+                });
+                let obj = {};
+                quotes.forEach(d => {
+                    if ( ! obj[d.character] ) {
+                        obj[d.character] = d;
+                    }
+                })
+                let res = Object.values(obj);
 
-            const arrCharacters = [];
-            quotes.forEach(quote => {
-                const characterName = quote?.character;
-                arrCharacters.push(characterName);
-            });
-            const uniqCharacters = arrCharacters.filter(onlyUnique);
-            uniqCharacters.sort();
-            console.log('uniqCharacter', uniqCharacters);
+                const count = document.getElementById('countElements');
+                const countUnique = document.getElementById('countUniqueElements');
+                count.innerHTML = 'Total elements: ' + quotes.length;
+                countUnique.innerHTML = 'Unique elements: ' + res.length;
 
-            let result = {};
-            for (let i in Object.keys(quotes)) {
-                if (quotes[i].character !== quotes[i].character) {
-                    result[i] = Object.assign({}, quotes[i]);
-                    console.log('unique');
-                }
-            }
-            console.log('result:', result);
-            console.log('result:', Object.keys(result));
+                return res.map(function(quote) {
+                    let div = createNode('div');
+                    div.classList.add('page-content__listItem');
 
+                    let quoteText = (quote.quote).substring(0,50)+"...";
 
-            const count = document.getElementById('countElements');
-            const countUnique = document.getElementById('countUniqueElements');
-            count.innerHTML = 'Total elements: ' + quotes.length;
-            countUnique.innerHTML = 'Unique elements: ' + uniqCharacters.length;
+                    div.innerHTML =
+                        `<span class="page-content__listItemCharacter">${quote.character}:</span> 
+                        <span class="page-content__listItemQuote">"${quoteText}"</span>`;
 
-            function byCharacter(field) {
-                return (a, b) => a[field] > b[field] ? 1 : -1;
-            }
+                    append(list, div);
+                    btn.classList.remove('hide');
+                })
 
-            const sortedQuotes = quotes.sort(byCharacter('character')).filter(onlyUnique);
-
-            return sortedQuotes.map(function(quote) {
-
-                let div = createNode('div');
-                div.classList.add('page-content__listItem');
-
-                let quoteText = (quote.quote).substring(0,50)+"...";
-
-                div.innerHTML =
-                    `<span class="page-content__listItemCharacter">${quote.character}:</span> 
-                    <span class="page-content__listItemQuote">"${quoteText}"</span>`;
-
-                append(list, div);
-                btn.classList.remove('hide');
             })
+            .catch(err => console.log(err));
+    }
 
-        })
-        .catch(err => console.log(err));
-
-     btn.addEventListener('click', sendRequest('GET', requestURL, nextPage + 1));
+     btn.addEventListener('click', getData);
 
 
     function checkSmall(){
@@ -116,6 +101,5 @@ window.onload = function() {
     window.addEventListener("resize", function() {
         checkSmall();
     });
-
     checkSmall();
 };
