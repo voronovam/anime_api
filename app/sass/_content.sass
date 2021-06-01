@@ -8,12 +8,26 @@
   @include desktop
     flex-wrap: nowrap
     align-content: space-between
+
 .page-element
   border: 1px solid #3963aa
-  padding: 20px
+  padding: 40px
   background: $color-accent
-  &__inner
-    @include innerbox
+  position: relative
+  & > *
+    position: relative
+    z-index: 2
+  &:after
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    margin: 20px
+    background: white
+    padding: 20px
+    border: 1px solid #3963aa
 
 .main-content
   display: flex
@@ -46,22 +60,22 @@
   padding: 40px
   flex-grow: 1
   min-height: 530px
-  &__listCount
+  &__list-count
     margin-top: 30px
     font-size: 30px
     font-weight: 700
     color: $color-accent
   &__list
     margin-top: 30px
-  &__listItem
+  &__list-item
     margin-top: 20px
-  &__listItemHeadline
+  &__list-item-headline
     font-weight: 700
     font-size: 18px
-  &__listItemCharacter
+  &__list-item-character
     font-weight: 700
     font-size: 18px
-  &__listItemQuote
+  &__list-item-quote
     @include txt
 
   &__btn

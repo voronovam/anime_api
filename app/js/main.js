@@ -14,7 +14,7 @@ window.onload = function() {
     const list = document.getElementById('pageContent');
     const btn = document.getElementById('loadMore');
     let nextPage = 1;
-
+    const requestURL = `https://animechan.vercel.app/api/quotes/anime?title=naruto&page=${nextPage}`;
     function sendRequest(method, url){
         const headers = {
             'Content-type': 'application/json',
@@ -36,20 +36,15 @@ window.onload = function() {
                     throw er
                 })
             }
-
         })
-
     }
 
     getData();
     function getData(){
         nextPage++;
-        const requestURL = `https://animechan.vercel.app/api/quotes/anime?title=naruto&page=${nextPage}`;
         sendRequest('GET', requestURL)
             .then(function(data) {
                 let quotes = data;
-                //console.log('quotes:', typeof quotes, quotes);
-
                 quotes.sort( (a, b) => {
                     if (a.character < b.character)
                         return -1
@@ -71,16 +66,19 @@ window.onload = function() {
                 countUnique.innerHTML = 'Unique elements: ' + res.length;
 
                 return res.map(function(quote) {
-                    let div = createNode('div');
-                    div.classList.add('page-content__listItem');
+                    let article = createNode('article');
+                    article.classList.add('page-content__list-item');
 
                     let quoteText = (quote.quote).substring(0,50)+"...";
 
-                    div.innerHTML =
-                        `<span class="page-content__listItemCharacter">${quote.character}:</span> 
-                        <span class="page-content__listItemQuote">"${quoteText}"</span>`;
+                    article.innerHTML =
+                        `<p>
+                            <span class="page-content__list-item-character">${quote.character}:</span> 
+                            <span class="page-content__list-item-quote">"${quoteText}"</span>
+                        </p>
+                        `;
 
-                    append(list, div);
+                    append(list, article);
                     btn.classList.remove('hide');
                 })
 
@@ -90,16 +88,15 @@ window.onload = function() {
 
      btn.addEventListener('click', getData);
 
-
+    checkSmall();
     function checkSmall(){
         const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         if (windowWidth < 1260){
             console.log('mobile')
         }
     }
-
     window.addEventListener("resize", function() {
         checkSmall();
     });
-    checkSmall();
+
 };
