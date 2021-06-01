@@ -10,11 +10,11 @@ window.onload = function() {
         return parent.appendChild(el);
     }
 
-
     const list = document.getElementById('pageContent');
     const btn = document.getElementById('loadMore');
-    let nextPage = 1;
-    const requestURL = `https://animechan.vercel.app/api/quotes/anime?title=naruto&page=${nextPage}`;
+    let nextPage = 0;
+    const apiUrl = `https://animechan.vercel.app/api/quotes/anime?title=naruto`;
+
     function sendRequest(method, url){
         const headers = {
             'Content-type': 'application/json',
@@ -42,6 +42,7 @@ window.onload = function() {
     getData();
     function getData(){
         nextPage++;
+        const requestURL = `${apiUrl}&page=${nextPage}`;
         sendRequest('GET', requestURL)
             .then(function(data) {
                 let quotes = data;
